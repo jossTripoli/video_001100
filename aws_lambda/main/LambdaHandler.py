@@ -6,29 +6,32 @@ def generateAudioUsingText(plainText,filename):
     session = Session(region_name="us-east-1")
     polly = session.client("polly")
     response = polly.synthesize_speech( Text=plainText,
+                                        Engine = "neural",
                                         TextType = "text",
                                         OutputFormat="mp3",
-                                        VoiceId="Matthew")
+                                        SpeechMarkTypes=["sentence","word"],
+                                        VoiceId="Danielle")
     s3 = session.resource('s3')
-    bucket_name = "video-000110-bucket"
+    bucket_name = "dart-store"
     bucket = s3.Bucket(bucket_name)
-    filename = "video-001100/" + filename
+    filename = "narration/concepts/" + filename
     stream = response["AudioStream"]
     bucket.put_object(Key=filename, Body=stream.read())
-    
     
 def generateAudioUsingSSML(ssmlText,filename):
     # Generate audio using Text
     session = Session(region_name="us-east-1")
     polly = session.client("polly")
     response = polly.synthesize_speech( Text=ssmlText,
+                                        Engine = "neural",
                                         TextType = "ssml",
                                         OutputFormat="mp3",
-                                        VoiceId="Matthew")
+                                        SpeechMarkTypes=["sentence","word"],
+                                        VoiceId="Danielle")
     s3 = session.resource('s3')
-    bucket_name = "video-000110-bucket"
+    bucket_name = "dart-store"
     bucket = s3.Bucket(bucket_name)
-    filename = "video-001100/" + filename
+    filename = "narration/concepts/" + filename
     stream = response["AudioStream"]
     bucket.put_object(Key=filename, Body=stream.read())
 
